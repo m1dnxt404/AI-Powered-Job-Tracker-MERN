@@ -4,7 +4,7 @@ A full-stack SaaS application built with the MERN stack that helps users manage 
 
 ## Architecture
 
-```
+```text
 Client (React + Vite + Tailwind CSS)
         ↓
 Express API (Node.js)
@@ -40,7 +40,7 @@ AI Provider (pick one)
 
 ## Project Structure
 
-```
+```text
 ai-job-tracker/
 ├── client/                  # React Frontend
 │   └── src/

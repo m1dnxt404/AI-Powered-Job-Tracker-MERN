@@ -1,7 +1,80 @@
 @import "tailwindcss";
 
+@theme {
+  /* Flutter Material Dark theme palette */
+  --color-surface-dim: #121212;
+  --color-surface: #1e1e1e;
+  --color-surface-bright: #2c2c2c;
+  --color-surface-container: #252525;
+  --color-surface-high: #353535;
+  --color-surface-highest: #3f3f3f;
+  --color-outline: #444444;
+  --color-outline-dim: #2e2e2e;
+  --color-on-surface: #e1e1e1;
+  --color-on-surface-dim: #a0a0a0;
+  --color-primary: #bb86fc;
+  --color-primary-dim: #9a67ea;
+  --color-primary-bright: #d4b4fc;
+  --color-on-primary: #1a1a1a;
+  --color-secondary: #03dac6;
+  --color-secondary-dim: #018786;
+  --color-on-secondary: #000000;
+  --color-error: #cf6679;
+  --color-on-error: #1a1a1a;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   min-height: 100vh;
-  background-color: #f1f5f9;
+  background-color: #121212;
+  color: #e1e1e1;
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #3f3f3f;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555555;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s ease-out both;
+}
+
+.animate-slide-down {
+  animation: slideDown 0.3s ease-out both;
+}
+
+.stagger-1 { animation-delay: 0.05s; }
+.stagger-2 { animation-delay: 0.1s; }
+.stagger-3 { animation-delay: 0.15s; }
+.stagger-4 { animation-delay: 0.2s; }
