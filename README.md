@@ -82,6 +82,9 @@ Copy the environment template and fill in your values:
 cp server/.env.example server/.env
 ```
 
+> **Important:** You **must** create the `server/.env` file before starting the server. Without it, the app will crash with:
+> `The uri parameter to openUri() must be a string, got "undefined"`
+
 ```env
 PORT=5000
 MONGO_URI=mongodb+srv://<username>:<password>@cluster.mongodb.net/ai-job-tracker
@@ -97,6 +100,17 @@ DEEPSEEK_API_KEY=your_deepseek_api_key_here
 OLLAMA_BASE_URL=http://localhost:11434
 OLLAMA_MODEL=llama3
 ```
+
+| Variable            | Required | Description                                    |
+| ------------------- | -------- | ---------------------------------------------- |
+| `MONGO_URI`         | Yes      | MongoDB connection string (Atlas or local)     |
+| `JWT_SECRET`        | Yes      | Any random string used to sign JWT tokens      |
+| `ANTHROPIC_API_KEY` | No       | Only if using Claude provider                  |
+| `OPENAI_API_KEY`    | No       | Only if using OpenAI provider                  |
+| `GEMINI_API_KEY`    | No       | Only if using Gemini provider                  |
+| `DEEPSEEK_API_KEY`  | No       | Only if using DeepSeek provider                |
+| `OLLAMA_BASE_URL`   | No       | Defaults to `http://localhost:11434`           |
+| `OLLAMA_MODEL`      | No       | Defaults to `llama3`                           |
 
 ### 2. Install dependencies
 
