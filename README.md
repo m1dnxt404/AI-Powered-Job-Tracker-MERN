@@ -1,0 +1,117 @@
+# AI-Powered Job Tracker
+
+A full-stack SaaS application built with the MERN stack that helps users manage job applications and leverages AI to analyze resume-job description matching.
+
+## Architecture
+
+```
+Client (React + Vite + Tailwind CSS)
+        ↓
+Express API (Node.js)
+        ↓
+MongoDB (Atlas)
+        ↓
+Anthropic Claude API
+```
+
+## Features
+
+- **User Authentication** — Register, login, and JWT-based session management
+- **Job Tracking** — Create, read, update, and delete job applications
+- **Status Management** — Track applications as Applied, Interview, Offer, or Rejected
+- **Dashboard Analytics** — Visual stats summary with status-based filtering
+- **AI Resume Matching** — Paste your resume to get an AI-powered match score and feedback against any job description
+
+## Project Structure
+
+```
+ai-job-tracker/
+├── client/                  # React Frontend
+│   └── src/
+│       ├── api/axios.js         # Axios instance with auth interceptor
+│       ├── components/          # Navbar, JobCard, JobForm, ProtectedRoute
+│       ├── context/             # AuthContext (login, register, logout)
+│       └── pages/               # Login, Register, Dashboard, JobDetails
+│
+├── server/                  # Node + Express Backend
+│   ├── config/db.js             # MongoDB connection
+│   ├── controllers/             # Auth, Job, AI controllers
+│   ├── middleware/              # JWT auth & error handling
+│   ├── models/                  # User & Job Mongoose schemas
+│   ├── routes/                  # Auth, Job, AI routes
+│   ├── utils/aiService.js       # Anthropic Claude integration
+│   └── server.js                # Express entry point
+│
+└── README.md
+```
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js (v18+)
+- MongoDB Atlas account (or local MongoDB)
+- Anthropic API key
+
+### 1. Clone and configure
+
+```bash
+git clone <your-repo-url>
+cd ai-job-tracker
+```
+
+Copy the environment template and fill in your values:
+
+```bash
+cp server/.env.example server/.env
+```
+
+```env
+PORT=5000
+MONGO_URI=mongodb+srv://<username>:<password>@cluster.mongodb.net/ai-job-tracker
+JWT_SECRET=your_jwt_secret_key_here
+ANTHROPIC_API_KEY=your_anthropic_api_key_here
+```
+
+### 2. Install dependencies
+
+```bash
+cd server && npm install
+cd ../client && npm install
+```
+
+### 3. Run the application
+
+Start the backend and frontend in separate terminals:
+
+```bash
+# Terminal 1 — Backend (http://localhost:5000)
+cd server && npm run dev
+
+# Terminal 2 — Frontend (http://localhost:5173)
+cd client && npm run dev
+```
+
+## API Routes
+
+| Method | Endpoint             | Description          | Auth     |
+| ------ | -------------------- | -------------------- | -------- |
+| POST   | `/api/auth/register` | Register a new user  | Public   |
+| POST   | `/api/auth/login`    | Login                | Public   |
+| GET    | `/api/auth/profile`  | Get user profile     | Required |
+| GET    | `/api/jobs`          | Get all user jobs    | Required |
+| POST   | `/api/jobs`          | Create a job         | Required |
+| GET    | `/api/jobs/:id`      | Get a single job     | Required |
+| PUT    | `/api/jobs/:id`      | Update a job         | Required |
+| DELETE | `/api/jobs/:id`      | Delete a job         | Required |
+| POST   | `/api/ai/analyze`    | AI resume analysis   | Required |
+
+## Tech Stack
+
+| Layer    | Technology              |
+| -------- | ----------------------- |
+| Frontend | React, Vite, Tailwind   |
+| Backend  | Node.js, Express        |
+| Database | MongoDB Atlas, Mongoose |
+| Auth     | JWT, bcryptjs           |
+| AI       | Anthropic Claude API    |
