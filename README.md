@@ -11,7 +11,12 @@ Express API (Node.js)
         ↓
 MongoDB (Atlas)
         ↓
-Anthropic Claude API
+AI Provider (pick one)
+├── Claude (Anthropic)
+├── OpenAI (GPT)
+├── Gemini (Google)
+├── DeepSeek
+└── Ollama (Local)
 ```
 
 ## Features
@@ -21,6 +26,17 @@ Anthropic Claude API
 - **Status Management** — Track applications as Applied, Interview, Offer, or Rejected
 - **Dashboard Analytics** — Visual stats summary with status-based filtering
 - **AI Resume Matching** — Paste your resume to get an AI-powered match score and feedback against any job description
+- **Multi-Provider AI** — Choose between Claude, OpenAI, Gemini, DeepSeek, or Ollama per analysis
+
+## Supported AI Providers
+
+| Provider | Model            | API Key Required | Notes                          |
+| -------- | ---------------- | ---------------- | ------------------------------ |
+| Claude   | claude-sonnet    | Yes              | Anthropic API                  |
+| OpenAI   | gpt-4o-mini      | Yes              | OpenAI API                     |
+| Gemini   | gemini-2.0-flash | Yes              | Google AI API                  |
+| DeepSeek | deepseek-chat    | Yes              | OpenAI-compatible API          |
+| Ollama   | llama3 (default) | No               | Runs locally, no cloud needed  |
 
 ## Project Structure
 
@@ -39,7 +55,7 @@ ai-job-tracker/
 │   ├── middleware/              # JWT auth & error handling
 │   ├── models/                  # User & Job Mongoose schemas
 │   ├── routes/                  # Auth, Job, AI routes
-│   ├── utils/aiService.js       # Anthropic Claude integration
+│   ├── utils/aiService.js       # Multi-provider AI integration
 │   └── server.js                # Express entry point
 │
 └── README.md
@@ -51,7 +67,7 @@ ai-job-tracker/
 
 - Node.js (v18+)
 - MongoDB Atlas account (or local MongoDB)
-- Anthropic API key
+- At least one AI provider API key (or Ollama installed locally)
 
 ### 1. Clone and configure
 
@@ -70,7 +86,16 @@ cp server/.env.example server/.env
 PORT=5000
 MONGO_URI=mongodb+srv://<username>:<password>@cluster.mongodb.net/ai-job-tracker
 JWT_SECRET=your_jwt_secret_key_here
+
+# Add keys only for the providers you want to use
 ANTHROPIC_API_KEY=your_anthropic_api_key_here
+OPENAI_API_KEY=your_openai_api_key_here
+GEMINI_API_KEY=your_gemini_api_key_here
+DEEPSEEK_API_KEY=your_deepseek_api_key_here
+
+# Ollama (local — no API key needed, just have Ollama running)
+OLLAMA_BASE_URL=http://localhost:11434
+OLLAMA_MODEL=llama3
 ```
 
 ### 2. Install dependencies
@@ -106,12 +131,14 @@ cd client && npm run dev
 | DELETE | `/api/jobs/:id`      | Delete a job         | Required |
 | POST   | `/api/ai/analyze`    | AI resume analysis   | Required |
 
+The `/api/ai/analyze` endpoint accepts an optional `provider` field in the request body (`"claude"`, `"openai"`, `"gemini"`, `"deepseek"`, or `"ollama"`). Defaults to `"claude"` if not specified.
+
 ## Tech Stack
 
-| Layer    | Technology              |
-| -------- | ----------------------- |
-| Frontend | React, Vite, Tailwind   |
-| Backend  | Node.js, Express        |
-| Database | MongoDB Atlas, Mongoose |
-| Auth     | JWT, bcryptjs           |
-| AI       | Anthropic Claude API    |
+| Layer    | Technology                                          |
+| -------- | --------------------------------------------------- |
+| Frontend | React, Vite, Tailwind CSS                           |
+| Backend  | Node.js, Express                                    |
+| Database | MongoDB Atlas, Mongoose                             |
+| Auth     | JWT, bcryptjs                                       |
+| AI       | Claude, OpenAI, Gemini, DeepSeek, Ollama            |
