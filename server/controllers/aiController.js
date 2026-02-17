@@ -1,10 +1,15 @@
 const { analyzeResumeMatch } = require("../utils/aiService");
+const { extractText } = require("../utils/extractText");
 const Job = require("../models/Job");
 
 // POST /api/ai/analyze
 const analyzeJob = async (req, res) => {
   try {
-    const { resume, jobId, provider } = req.body;
+    const { jobId, provider } = req.body;
+
+    if (!req.file) {
+      return res.status(400).json({ message: "Please upload a resume file (PDF or DOCX)" });
+    }
 
     const job = await Job.findById(jobId);
     if (!job) {
@@ -21,8 +26,13 @@ const analyzeJob = async (req, res) => {
         .json({ message: "Job description is required for AI analysis" });
     }
 
+    const resumeText = await extractText(req.file);
+    if (!resumeText.trim()) {
+      return res.status(400).json({ message: "Could not extract text from the uploaded file" });
+    }
+
     const result = await analyzeResumeMatch(
-      resume,
+      resumeText,
       job.jobDescription,
       provider || "claude"
     );

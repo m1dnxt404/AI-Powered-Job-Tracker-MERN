@@ -25,7 +25,7 @@ AI Provider (pick one)
 - **Job Tracking** — Create, read, update, and delete job applications
 - **Status Management** — Track applications as Applied, Interview, Offer, or Rejected
 - **Dashboard Analytics** — Visual stats summary with status-based filtering
-- **AI Resume Matching** — Paste your resume to get an AI-powered match score and feedback against any job description
+- **AI Resume Matching** — Upload your resume (PDF or DOCX) to get an AI-powered match score and feedback against any job description
 - **Multi-Provider AI** — Choose between Claude, OpenAI, Gemini, DeepSeek, or Ollama per analysis
 
 ## Supported AI Providers
@@ -52,10 +52,11 @@ ai-job-tracker/
 ├── server/                  # Node + Express Backend
 │   ├── config/db.js             # MongoDB connection (with in-memory fallback)
 │   ├── controllers/             # Auth, Job, AI controllers
-│   ├── middleware/              # JWT auth & error handling
+│   ├── middleware/              # JWT auth, error handling & file upload (multer)
 │   ├── models/                  # User & Job Mongoose schemas
 │   ├── routes/                  # Auth, Job, AI routes
 │   ├── utils/aiService.js       # Multi-provider AI integration
+│   ├── utils/extractText.js    # PDF & DOCX text extraction
 │   └── server.js                # Express entry point
 │
 └── README.md
@@ -144,7 +145,7 @@ cd client && npm run dev
 | DELETE | `/api/jobs/:id`      | Delete a job         | Required |
 | POST   | `/api/ai/analyze`    | AI resume analysis   | Required |
 
-The `/api/ai/analyze` endpoint accepts an optional `provider` field in the request body (`"claude"`, `"openai"`, `"gemini"`, `"deepseek"`, or `"ollama"`). Defaults to `"claude"` if not specified.
+The `/api/ai/analyze` endpoint accepts a `multipart/form-data` request with a `resume` file (PDF or DOCX), a `jobId` field, and an optional `provider` field (`"claude"`, `"openai"`, `"gemini"`, `"deepseek"`, or `"ollama"`). Defaults to `"claude"` if not specified.
 
 ## Tech Stack
 
@@ -155,3 +156,4 @@ The `/api/ai/analyze` endpoint accepts an optional `provider` field in the reque
 | Database | MongoDB (Atlas, local, or in-memory), Mongoose      |
 | Auth     | JWT, bcryptjs                                       |
 | AI       | Claude, OpenAI, Gemini, DeepSeek, Ollama            |
+| Upload   | Multer (memory storage), pdf-parse, mammoth         |
