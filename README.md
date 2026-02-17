@@ -9,7 +9,7 @@ Client (React + Vite + Tailwind CSS)
         ↓
 Express API (Node.js)
         ↓
-MongoDB (Atlas)
+MongoDB (Atlas or In-Memory)
         ↓
 AI Provider (pick one)
 ├── Claude (Anthropic)
@@ -50,7 +50,7 @@ ai-job-tracker/
 │       └── pages/               # Login, Register, Dashboard, JobDetails
 │
 ├── server/                  # Node + Express Backend
-│   ├── config/db.js             # MongoDB connection
+│   ├── config/db.js             # MongoDB connection (with in-memory fallback)
 │   ├── controllers/             # Auth, Job, AI controllers
 │   ├── middleware/              # JWT auth & error handling
 │   ├── models/                  # User & Job Mongoose schemas
@@ -66,7 +66,7 @@ ai-job-tracker/
 ### Prerequisites
 
 - Node.js (v18+)
-- MongoDB Atlas account (or local MongoDB)
+- MongoDB Atlas account, local MongoDB, or none (in-memory mode available for testing)
 - At least one AI provider API key (or Ollama installed locally)
 
 ### 1. Clone and configure
@@ -82,12 +82,11 @@ Copy the environment template and fill in your values:
 cp server/.env.example server/.env
 ```
 
-> **Important:** You **must** create the `server/.env` file before starting the server. Without it, the app will crash with:
-> `The uri parameter to openUri() must be a string, got "undefined"`
+> **Note:** If `MONGO_URI` is not set, the server automatically uses an in-memory MongoDB instance via `mongodb-memory-server`. This is useful for quick testing but data will not persist across server restarts.
 
 ```env
 PORT=5000
-MONGO_URI=mongodb+srv://<username>:<password>@cluster.mongodb.net/ai-job-tracker
+MONGO_URI=mongodb+srv://<username>:<password>@cluster.mongodb.net/ai-job-tracker  # Optional — omit for in-memory testing
 JWT_SECRET=your_jwt_secret_key_here
 
 # Add keys only for the providers you want to use
@@ -101,16 +100,16 @@ OLLAMA_BASE_URL=http://localhost:11434
 OLLAMA_MODEL=llama3
 ```
 
-| Variable            | Required | Description                                    |
-| ------------------- | -------- | ---------------------------------------------- |
-| `MONGO_URI`         | Yes      | MongoDB connection string (Atlas or local)     |
-| `JWT_SECRET`        | Yes      | Any random string used to sign JWT tokens      |
-| `ANTHROPIC_API_KEY` | No       | Only if using Claude provider                  |
-| `OPENAI_API_KEY`    | No       | Only if using OpenAI provider                  |
-| `GEMINI_API_KEY`    | No       | Only if using Gemini provider                  |
-| `DEEPSEEK_API_KEY`  | No       | Only if using DeepSeek provider                |
-| `OLLAMA_BASE_URL`   | No       | Defaults to `http://localhost:11434`           |
-| `OLLAMA_MODEL`      | No       | Defaults to `llama3`                           |
+| Variable            | Required | Description                                                                       |
+| ------------------- | -------- | --------------------------------------------------------------------------------- |
+| `MONGO_URI`         | No       | MongoDB connection string (Atlas or local). Falls back to in-memory DB if not set |
+| `JWT_SECRET`        | Yes      | Any random string used to sign JWT tokens                                         |
+| `ANTHROPIC_API_KEY` | No       | Only if using Claude provider                                                     |
+| `OPENAI_API_KEY`    | No       | Only if using OpenAI provider                                                     |
+| `GEMINI_API_KEY`    | No       | Only if using Gemini provider                                                     |
+| `DEEPSEEK_API_KEY`  | No       | Only if using DeepSeek provider                                                   |
+| `OLLAMA_BASE_URL`   | No       | Defaults to `http://localhost:11434`                                              |
+| `OLLAMA_MODEL`      | No       | Defaults to `llama3`                                                              |
 
 ### 2. Install dependencies
 
@@ -153,6 +152,6 @@ The `/api/ai/analyze` endpoint accepts an optional `provider` field in the reque
 | -------- | --------------------------------------------------- |
 | Frontend | React, Vite, Tailwind CSS                           |
 | Backend  | Node.js, Express                                    |
-| Database | MongoDB Atlas, Mongoose                             |
+| Database | MongoDB (Atlas, local, or in-memory), Mongoose      |
 | Auth     | JWT, bcryptjs                                       |
 | AI       | Claude, OpenAI, Gemini, DeepSeek, Ollama            |
